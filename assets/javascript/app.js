@@ -1,13 +1,17 @@
 $(function () {
-
+    //-- firebase is pulling an error. but im not sure what it is .
+    //-- is is still updating but it is giving an error for the default not being set. 
+    //-- tried to get this error from showing but to no avail.
     var config = {
-        apiKey: "AIzaSyARYyZkZLUQZOyJQU7cMku9y1ypSjCz5iE",
-        authDomain: "project-roadtrip.firebaseapp.com",
-        databaseURL: "https://project-roadtrip.firebaseio.com",
-        projectId: "project-roadtrip",
-        storageBucket: "project-roadtrip.appspot.com",
-    };
-    firebase.initializeApp(config);
+        apiKey: "AIzaSyCMPJAebkYT6GhtKhzrTmGuL2InwwbEnwE",
+        authDomain: "my-other-roadtrip-bd.firebaseapp.com",
+        databaseURL: "https://my-other-roadtrip-bd.firebaseio.com",
+        projectId: "my-other-roadtrip-bd",
+        storageBucket: "my-other-roadtrip-bd.appspot.com",
+        messagingSenderId: "1022651492776"
+      };
+      firebase.initializeApp(config);
+    //   App.initializeApp(app);
 
     initMap();
 
@@ -17,13 +21,13 @@ $(function () {
 var parsedLat = null;
 var parsedLng = null;
 var foodResults = [];
-
+var gasResults = [];
 
 
 $("#button-1").on("click", function () {
-
-    getFood(parsedLat, parsedLng);
-    displayGasList(parsedLat, parsedLng);
+    event.preventDefault();
+    // getFood(parsedLat, parsedLng);
+    // displayGasList(parsedLat, parsedLng);
     mapCreation(parsedLat, parsedLng);
 
 });
@@ -138,13 +142,47 @@ function getFood(lati, long) {
         $("#food").empty();
         for (i = 0; i < 5; i++) {
             // console.log("for loop");
-            // console.log(response.restaurants[i]);
-            // var restaurantCords = {
-            //     lat: parseInt(response.restaurants[i].restaurant.location.latitude),
-            //     lng: parseInt(response.restaurants[i].restaurant.location.longitude)
-            // };
+            console.log(resp.restaurants[i]);
+            var restaurantCords = {
+                lat: parseInt(resp.restaurants[i].restaurant.location.latitude),
+                lng: parseInt(resp.restaurants[i].restaurant.location.longitude)
+            };
+//-- trying to get the markers to populate on the map in this for loop but im not having luck with it.
+//-- keep getting error that SetMap not an instance of Map...
+//-- not sure why this is happening still.
+        //     foodResults.push(restaurantCords);
 
-            // foodResults.push(restaurantCords);
+        //     var marker = new google.maps.Marker({
+        //         position: restaurantCords,
+        
+                
+        //         map: map,
+        //         icon: 'assets/images/markers/darkgreenU.png '
+        
+        //     });
+        //     var infoWindow = new google.maps.InfoWindow({
+        //         content: '<h3>This is a test message!</h3>'
+        //     })
+        
+        //     marker.addListener('click', function () {
+        //         infoWindow.open(map, marker);
+        //     })
+        // setMap();
+        // marker.setMap(map);
+        
+            addMarker(restaurantCords);
+        
+            function addMarker(coords) {
+                var marker = new google.maps.Marker({
+                    position: coords,
+                    map: map,
+                    icon: 'assets/images/markers/darkgreenU.png '
+        
+                });
+            }
+
+
+
             var resName = $("<dt>").text(resp.restaurants[i].restaurant.name);
             var resLocation = resp.restaurants[i].restaurant.location.address;
 
@@ -193,7 +231,7 @@ function getFood(lati, long) {
             addMarker(userLatLng);
         })
 
-    });
+     });
 }
 
 $("#gasStation").on("click", function (event) {
